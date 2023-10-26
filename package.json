@@ -9,7 +9,7 @@
     "prepare": "husky install",
     "precommit": "lint-staged && npm run lint:fix",
     "prepush": "npm run lint",
-    "start": "yarn build && node dist/server.js",
+    "start": "yarn build && node dist/index.js",
     "start:dev": "npx nodemon"
   },
   "lint-staged": {
