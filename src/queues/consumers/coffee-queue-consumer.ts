@@ -1,7 +1,9 @@
 import Bull, { Job, QueueOptions } from 'bull';
+import { promisify } from 'util';
 import configs from '../../configs';
 import { CoffeeQueueJobPayload } from '../../interfaces/coffee-queue-job-payload.interface';
 
+const sleep = promisify(setTimeout);
 const { REDIS_HOST, REDIS_PASSWORD, REDIS_PORT } = configs;
 const queueOptions: QueueOptions = {
   redis: {
@@ -14,14 +16,37 @@ const queueOptions: QueueOptions = {
 export const coffeeQueue = new Bull('coffee', queueOptions);
 
 // consumer or processor
-coffeeQueue.process((payload: Job<CoffeeQueueJobPayload>, done) => {
-  console.log('Wait for the coffee to be prepared....');
-  setTimeout(() => {
-    console.log('Preparing coffee using the following items:');
-    console.log(payload.data);
-  }, 3000);
-  setTimeout(() => {
-    console.log('Your coffee is ready! ☕');
+coffeeQueue.process(async (payload: Job<CoffeeQueueJobPayload>, done) => {
+  try {
+    console.time('coffee-queue-completion-time');
+    payload.log('Preparing coffee using the following items:');
+    payload.log(JSON.stringify(payload.data));
+    await sleep(3000);
+
+    payload.log('Grinding coffee beans...');
+    await sleep(2000);
+
+    payload.progress(20);
+    payload.log('Preparing water...');
+    await sleep(2000);
+
+    payload.progress(40);
+    payload.log('Soaking and stirring...');
+    await sleep(2000);
+
+    payload.progress(60);
+    payload.log('Brewing...');
+    await sleep(2000);
+
+    payload.progress(80);
+    payload.log('Almost there....');
+    await sleep(2000);
+
+    payload.progress(100);
+    payload.log('Your coffee is ready! ☕');
+    console.timeEnd('coffee-queue-completion-time');
     done();
-  }, 6000);
+  } catch (error: any) {
+    done(error);
+  }
 });

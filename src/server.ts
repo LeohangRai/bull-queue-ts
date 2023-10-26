@@ -42,6 +42,6 @@ app.get('/jobs/coffee', (_req: Request, res: Response) => {
 });
 
 app.listen(configs.SERVER_PORT, () => {
-  console.log(`Server is up and running at POROT: ${configs.SERVER_PORT}`);
+  console.log(`Server is up and running at PORT: ${configs.SERVER_PORT}`);
   console.log(`Access the Bull Dashboard at "${BULL_BOARD_PATH}"`);
 });
