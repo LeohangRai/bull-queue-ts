@@ -10,7 +10,7 @@ const queueOptions: QueueOptions = {
   }
 };
 
-const coffeeQueue = new Bull('coffee', queueOptions);
+export const coffeeQueue = new Bull('coffee', queueOptions);
 
 interface CoffeQueueJobPayload {
   coffeeBeans: string;
