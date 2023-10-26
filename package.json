@@ -1,7 +1,7 @@
 {
   "name": "bull-queue",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "build": "rimraf ./dist && tsc",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\"",
@@ -9,7 +9,7 @@
     "prepare": "husky install",
     "precommit": "lint-staged && npm run lint:fix",
     "prepush": "npm run lint",
-    "start": "yarn build && node dist/index.js",
+    "start": "yarn build && node dist/server.js",
     "start:dev": "npx nodemon"
   },
   "lint-staged": {

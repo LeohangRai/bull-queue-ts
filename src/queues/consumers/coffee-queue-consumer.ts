@@ -1,5 +1,6 @@
 import Bull, { Job, QueueOptions } from 'bull';
-import configs from './configs';
+import configs from '../../configs';
+import { CoffeeQueueJobPayload } from '../../interfaces/coffee-queue-job-payload.interface';
 
 const { REDIS_HOST, REDIS_PASSWORD, REDIS_PORT } = configs;
 const queueOptions: QueueOptions = {
@@ -12,15 +13,8 @@ const queueOptions: QueueOptions = {
 
 export const coffeeQueue = new Bull('coffee', queueOptions);
 
-interface CoffeQueueJobPayload {
-  coffeeBeans: string;
-  water: string;
-  coffeePlunge?: string;
-  cup: string;
-}
-
-// consumer
-coffeeQueue.process((payload: Job<CoffeQueueJobPayload>, done) => {
+// consumer or processor
+coffeeQueue.process((payload: Job<CoffeeQueueJobPayload>, done) => {
   console.log('Wait for the coffee to be prepared....');
   setTimeout(() => {
     console.log('Preparing coffee using the following items:');
@@ -31,11 +25,3 @@ coffeeQueue.process((payload: Job<CoffeQueueJobPayload>, done) => {
     done();
   }, 6000);
 });
-
-const coffeeQueueData: CoffeQueueJobPayload = {
-  coffeeBeans: '🫘',
-  water: '🚰',
-  cup: '🍵'
-};
-// producer
-coffeeQueue.add(coffeeQueueData);
