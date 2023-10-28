@@ -5,3 +5,4 @@ Dockerfile
 .gitignore
 .husky
 .env
+docker-compose*
