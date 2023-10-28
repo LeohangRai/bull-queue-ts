@@ -284,6 +284,11 @@
   resolved "https://registry.yarnpkg.com/@types/range-parser/-/range-parser-1.2.6.tgz#7cb33992049fd7340d5b10c0098e104184dfcd2a"
   integrity sha512-+0autS93xyXizIYiyL02FCY8N+KkKPhILhcUSA276HxzreZ16kl+cmwvV2qAM/PuCCwPXzOXOWhiPcw20uSFcA==
 
+"@types/redis-info@^3.0.2":
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/@types/redis-info/-/redis-info-3.0.2.tgz#2a455dec2d685c721636a03e7b2ceee88590ebee"
+  integrity sha512-BdeWD/fqGf0Nq2Pk/vwPfWr5bR7AkG13M/oVNhi/ss8RPVkv+XDqrJya0q8Kpkh9rKCgpWW9zHCjxN2t5qgyVQ==
+
 "@types/semver@^7.5.0":
   version "7.5.4"
   resolved "https://registry.yarnpkg.com/@types/semver/-/semver-7.5.4.tgz#0a41252ad431c473158b22f9bfb9a63df7541cff"
