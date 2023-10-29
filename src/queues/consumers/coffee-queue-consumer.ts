@@ -10,6 +10,10 @@ const queueOptions: QueueOptions = {
     host: REDIS_HOST,
     port: Number(REDIS_PORT),
     password: REDIS_PASSWORD
+  },
+  limiter: {
+    max: 10,
+    duration: 5000
   }
 };
 
