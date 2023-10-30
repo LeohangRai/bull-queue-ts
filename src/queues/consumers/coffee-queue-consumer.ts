@@ -19,6 +19,18 @@ const queueOptions: QueueOptions = {
 
 export const coffeeQueue = new Bull('coffee', queueOptions);
 
+coffeeQueue.on('completed', (job, result) => {
+  console.log(`Job ${job.id} completed with result ${result}`);
+});
+
+coffeeQueue.on('failed', (job, err) => {
+  console.log(`Job ${job.id} failed with error ${err}`);
+});
+
+coffeeQueue.on('progress', (job, progress) => {
+  console.log(`Job ${job.id} progress: ${progress}`);
+});
+
 // consumer or processor
 coffeeQueue.process(async (payload: Job<CoffeeQueueJobPayload>, done) => {
   try {
