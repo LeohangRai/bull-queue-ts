@@ -29,25 +29,40 @@ const queueOptions: QueueOptions = {
   }
 };
 
-export const jokesQueue = new Bull('jokes', queueOptions);
+class JokesQueueSingleton {
+  private static instance: Bull.Queue;
 
-jokesQueue.on('completed', (job, result) => {
-  console.log(`Job ${job.id} completed with result ${result}`);
-});
+  private constructor() {
+    const jokesQueue = new Bull('jokes', queueOptions);
+    jokesQueue.on('completed', (job, result) => {
+      console.log(`Job ${job.id} completed with result ${result}`);
+    });
 
-jokesQueue.on('failed', (job, err) => {
-  console.log(`Job ${job.id} failed with error ${err}`);
-});
+    jokesQueue.on('failed', (job, err) => {
+      console.log(`Job ${job.id} failed with error ${err}`);
+    });
 
-jokesQueue.on('progress', (job, progress) => {
-  console.log(`Job ${job.id} progress: ${progress}`);
-});
+    jokesQueue.on('progress', (job, progress) => {
+      console.log(`Job ${job.id} progress: ${progress}`);
+    });
 
-jokesQueue.process(async (_payload, done) => {
-  try {
-    await appendJokeToFile();
-    done();
-  } catch (error: any) {
-    done(error);
+    jokesQueue.process(async (_payload, done) => {
+      try {
+        await appendJokeToFile();
+        done();
+      } catch (error: any) {
+        done(error);
+      }
+    });
+    JokesQueueSingleton.instance = jokesQueue;
   }
-});
+
+  public static getInstance(): Bull.Queue {
+    if (!JokesQueueSingleton.instance) {
+      new JokesQueueSingleton();
+    }
+    return JokesQueueSingleton.instance;
+  }
+}
+
+export const jokesQueue = JokesQueueSingleton.getInstance();

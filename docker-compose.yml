@@ -4,9 +4,20 @@ services:
     build:
       context: .
       target: production
+    depends_on: # ensures that the specified services get started before the bull-queue-express service.
+      - redis
     ports:
       - '3000:3000'
     env_file:
       - ./.env
+    environment:
+      - REDIS_HOST=redis  # docker-compose automatically sets up a DNS entry for each service, making it accessible by its service name
+      - REDIS_PORT=6379
+
   redis:
     image: redis
+    volumes:
+      - redis_data:/data
+
+volumes:
+  redis_data:

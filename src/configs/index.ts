@@ -15,7 +15,7 @@ const {
 
 export default {
   SERVER_PORT: SERVER_PORT ?? 3000,
-  REDIS_HOST,
+  REDIS_HOST: REDIS_HOST ?? 'redis', // Docker Compose automatically sets up a DNS entry for each service, making it accessible by its service name.
   REDIS_PORT,
   REDIS_PASSWORD,
   MAIL_HOST,
