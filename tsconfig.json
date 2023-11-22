@@ -12,5 +12,6 @@
     "emitDecoratorMetadata": true,
     "strictPropertyInitialization": false,
     "resolveJsonModule": true
-  }
+  },
+  "exclude": ["node_modules", "__test__", "dist", "jest.config.js", "coverage"]
 }
