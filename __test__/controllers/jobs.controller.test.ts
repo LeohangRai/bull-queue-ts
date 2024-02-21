@@ -5,30 +5,62 @@ import {
   addMailJobHandler,
   startJokesQueueHandler
 } from '../../src/controllers/jobs.controller';
-import { coffeeQueue } from '../../src/queues/consumers/coffee-queue-consumer';
-import { jokesQueue } from '../../src/queues/consumers/jokes-queue-consumer';
-import { mailQueue } from '../../src/queues/consumers/mail-queue-consumer';
 import { MailJobInterface } from '../../src/interfaces/mail-job.interface';
+import CoffeeQueueSingleton from '../../src/queues/consumers/coffee-queue-consumer';
+import JokesQueueSingleton from '../../src/queues/consumers/jokes-queue-consumer';
+import MailQueueSingleton from '../../src/queues/consumers/mail-queue-consumer';
 
-jest.mock('../../src/queues/consumers/coffee-queue-consumer');
-jest.mock('../../src/queues/consumers/jokes-queue-consumer');
-jest.mock('../../src/queues/consumers/mail-queue-consumer');
+jest.mock('../../src/queues/consumers/coffee-queue-consumer', () => {
+  const mockAddQueueFn = jest.fn();
+  return {
+    getInstance: jest.fn(() => {
+      return {
+        coffeeQueue: {
+          add: mockAddQueueFn
+        }
+      };
+    })
+  };
+});
+
+jest.mock('../../src/queues/consumers/jokes-queue-consumer', () => {
+  const mockAddQueueFn = jest.fn();
+  return {
+    getInstance: jest.fn(() => {
+      return {
+        add: mockAddQueueFn
+      };
+    })
+  };
+});
+
+jest.mock('../../src/queues/consumers/mail-queue-consumer', () => {
+  const mockAddQueueFn = jest.fn();
+  return {
+    getInstance: jest.fn(() => {
+      return {
+        add: mockAddQueueFn
+      };
+    })
+  };
+});
+
+let req: Request;
+let res: Response;
+
+beforeEach(() => {
+  req = {} as Request;
+  res = {
+    status: jest.fn().mockReturnThis(),
+    json: jest.fn()
+  } as unknown as Response;
+});
 
 describe('addCoffeeJobHandler', () => {
-  let req: Request;
-  let res: Response;
+  const coffeeQueue = CoffeeQueueSingleton.getInstance().coffeeQueue;
 
-  beforeEach(() => {
-    req = {} as Request;
-    res = {
-      status: jest.fn().mockReturnThis(),
-      json: jest.fn()
-    } as unknown as Response;
-  });
-
-  it('should add a coffee job and return success response', () => {
+  it('should add a coffee job to the queue and return success response', () => {
     addCoffeeJobHandler(req, res);
-
     expect(coffeeQueue.add).toHaveBeenCalledWith({
       coffeeBeans: '🫘',
       water: '🚰',
@@ -44,15 +76,10 @@ describe('addCoffeeJobHandler', () => {
 });
 
 describe('startJokesQueueHandler', () => {
-  const req = {} as Request;
-  const res = {
-    status: jest.fn().mockReturnThis(),
-    json: jest.fn()
-  } as unknown as Response;
+  const jokesQueue = JokesQueueSingleton.getInstance();
 
   it('should add a job to the jokes queue with the correct job options', () => {
     startJokesQueueHandler(req, res);
-
     expect(jokesQueue.add).toHaveBeenCalledWith(
       {},
       { attempts: 3, repeat: { cron: '10 * * * * *' } }
@@ -70,10 +97,7 @@ describe('addMailJobHandler', () => {
   const req = {
     body: {}
   } as Request;
-  const res = {
-    status: jest.fn().mockReturnThis(),
-    json: jest.fn()
-  } as unknown as Response;
+  const mailQueue = MailQueueSingleton.getInstance();
 
   it('should return 422 status if required fields are missing', () => {
     addMailJobHandler(req, res);

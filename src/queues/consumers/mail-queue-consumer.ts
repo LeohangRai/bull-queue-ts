@@ -48,4 +48,4 @@ class MailQueueSingleton {
   }
 }
 
-export const mailQueue = MailQueueSingleton.getInstance();
+export default MailQueueSingleton;

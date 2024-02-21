@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "test": "jest --coverage",
     "build": "rimraf ./dist && tsc",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\"",
     "lint:fix": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
@@ -11,7 +10,10 @@
     "precommit": "lint-staged && npm run lint:fix",
     "prepush": "npm run lint",
     "start": "yarn build && node dist/server.js",
-    "start:dev": "npx nodemon"
+    "start:dev": "npx nodemon",
+    "test:watch": "jest --watch",
+    "test:cov": "jest --coverage",
+    "test": "jest --runInBand --detectOpenHandles"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": [

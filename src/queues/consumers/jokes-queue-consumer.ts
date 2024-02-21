@@ -65,4 +65,4 @@ class JokesQueueSingleton {
   }
 }
 
-export const jokesQueue = JokesQueueSingleton.getInstance();
+export default JokesQueueSingleton;

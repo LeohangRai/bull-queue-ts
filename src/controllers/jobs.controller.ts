@@ -1,11 +1,9 @@
 import { Request, Response } from 'express';
 import { JobOptions } from 'bull';
 import { CoffeeQueueJobPayload } from '../interfaces/coffee-queue-job-payload.interface';
-import { coffeeQueue } from '../queues/consumers/coffee-queue-consumer';
-import { jokesQueue } from '../queues/consumers/jokes-queue-consumer';
-import { mailQueue } from '../queues/consumers/mail-queue-consumer';
 import { BULL_BOARD_PATH } from '../constants';
 import { MailJobInterface } from '../interfaces/mail-job.interface';
+import { coffeeQueue, jokesQueue, mailQueue } from '../queues/consumers';
 
 export const addCoffeeJobHandler = (_req: Request, res: Response) => {
   const coffeeQueueData: CoffeeQueueJobPayload = {
