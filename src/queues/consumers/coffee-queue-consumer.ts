@@ -82,4 +82,4 @@ class CoffeeQueueSingleton {
   }
 }
 
-export const coffeeQueue = CoffeeQueueSingleton.getInstance().coffeeQueue;
+export default CoffeeQueueSingleton;

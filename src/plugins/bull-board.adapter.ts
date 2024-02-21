@@ -1,10 +1,8 @@
 import { createBullBoard } from '@bull-board/api';
 import { BullAdapter } from '@bull-board/api/bullAdapter';
 import { ExpressAdapter } from '@bull-board/express';
-import { coffeeQueue } from '../queues/consumers/coffee-queue-consumer';
-import { jokesQueue } from '../queues/consumers/jokes-queue-consumer';
-import { mailQueue } from '../queues/consumers/mail-queue-consumer';
 import { BULL_BOARD_PATH } from '../constants';
+import { coffeeQueue, jokesQueue, mailQueue } from '../queues/consumers';
 
 const expressServerAdapter = new ExpressAdapter();
 expressServerAdapter.setBasePath(BULL_BOARD_PATH);
