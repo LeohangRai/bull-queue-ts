@@ -12,25 +12,40 @@ const queueOptions: QueueOptions = {
   }
 };
 
-export const mailQueue = new Bull('mail', queueOptions);
+class MailQueueSingleton {
+  private static instance: Bull.Queue<MailJobInterface>;
 
-mailQueue.on('completed', (job, result) => {
-  console.log(`Email job ${job.id} completed with result ${result}`);
-});
+  private constructor() {
+    const mailQueue = new Bull('mail', queueOptions);
+    mailQueue.on('completed', (job, result) => {
+      console.log(`Email job ${job.id} completed with result ${result}`);
+    });
 
-mailQueue.on('failed', (job, err) => {
-  console.log(`Email job ${job.id} failed with error ${err}`);
-});
+    mailQueue.on('failed', (job, err) => {
+      console.log(`Email job ${job.id} failed with error ${err}`);
+    });
 
-mailQueue.on('progress', (job, progress) => {
-  console.log(`Email job ${job.id} progress: ${progress}`);
-});
+    mailQueue.on('progress', (job, progress) => {
+      console.log(`Email job ${job.id} progress: ${progress}`);
+    });
 
-mailQueue.process(async (job: Job<MailJobInterface>, done) => {
-  try {
-    await sendMail(job.data);
-    done();
-  } catch (error: any) {
-    done(error);
+    mailQueue.process(async (job: Job<MailJobInterface>, done) => {
+      try {
+        await sendMail(job.data);
+        done();
+      } catch (error: any) {
+        done(error);
+      }
+    });
+    MailQueueSingleton.instance = mailQueue;
   }
-});
+
+  public static getInstance(): Bull.Queue<MailJobInterface> {
+    if (!MailQueueSingleton.instance) {
+      new MailQueueSingleton();
+    }
+    return MailQueueSingleton.instance;
+  }
+}
+
+export const mailQueue = MailQueueSingleton.getInstance();
